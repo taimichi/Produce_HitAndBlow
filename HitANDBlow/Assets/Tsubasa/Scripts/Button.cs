@@ -9,7 +9,7 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     #region enumData
     // ボタンの種類を設定
     // タイトルシーンでのボタン
-    enum ButtonProperty
+    public enum ButtonProperty
     {
         None,         // なしの状態
         VolumeUp,     // 音量上昇
@@ -25,6 +25,8 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
+    // 仮
+    [SerializeField] GameObject test;
     // アニメーションの設定
     [SerializeField] Animator anim;
 
