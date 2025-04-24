@@ -16,8 +16,10 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         VolumeDown,   // 音量下降
         GoTitle,      // タイトルへ戻る
         OpenTutorial, // チュートリアルを開く(仮)
+        Yes_Title,    // 中断する場合
+        No_Title,     // 中断しない場合
     }
-    // 基本的にはNoneで設定して使うときに変更一種類のみに設定すること
+    // 基本的にはNoneで設定しておく
     [Header("ボタンの種類選択"), SerializeField] ButtonProperty button = ButtonProperty.None;
     #endregion
 
@@ -25,8 +27,7 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
-    // 仮
-    [SerializeField] GameObject test;
+    [Header("ゲーム中断するか確認するUIパネル"),SerializeField] GameObject GoTitlePanel;
     // アニメーションの設定
     [SerializeField] Animator anim;
 

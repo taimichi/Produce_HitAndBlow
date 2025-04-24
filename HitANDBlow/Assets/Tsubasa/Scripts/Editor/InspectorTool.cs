@@ -19,9 +19,11 @@ public class InspectorTool : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("anim"));
 
         // enumÇÃílÇ…ÇÊÇ¡Çƒì¡íËÇÃï\é¶ÇçsÇ§
-        if (type == Button.ButtonProperty.OpenTutorial)
+        if (type == Button.ButtonProperty.GoTitle   ||
+            type == Button.ButtonProperty.Yes_Title ||
+            type == Button.ButtonProperty.No_Title ) 
         {
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("test"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("GoTitlePanel"));
         }
 
         serializedObject.ApplyModifiedProperties();
