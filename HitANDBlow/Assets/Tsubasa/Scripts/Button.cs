@@ -18,6 +18,7 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         OpenTutorial, // チュートリアルを開く(仮)
         Yes_Title,    // 中断する場合
         No_Title,     // 中断しない場合
+        Settings,     // 設定画面の表示非表示
     }
     // 基本的にはNoneで設定しておく
     [Header("ボタンの種類選択"), SerializeField] ButtonProperty button = ButtonProperty.None;
@@ -28,6 +29,7 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     GameObject nowSelectObj;
 
     [Header("ゲーム中断するか確認するUIパネル"),SerializeField] GameObject GoTitlePanel;
+    [Header("メニュー項目のキャンバス"),SerializeField] GameObject MenuCanvas;
     // アニメーションの設定
     [SerializeField] Animator anim;
 
@@ -95,6 +97,19 @@ public partial class Button : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void VolumeDown()
     {
         Debug.Log("DOWN");
+    }
+
+    // メニューボタン
+    private void Settings()
+    {
+        if (MenuCanvas.activeSelf)
+        {
+            MenuCanvas.SetActive(false);
+        }
+        else
+        {
+            MenuCanvas.SetActive(true);
+        }
     }
     #endregion
 }

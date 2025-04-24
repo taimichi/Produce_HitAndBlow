@@ -26,6 +26,11 @@ public class InspectorTool : Editor
             EditorGUILayout.PropertyField(serializedObject.FindProperty("GoTitlePanel"));
         }
 
+        else if(type==Button.ButtonProperty.Settings)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("MenuCanvas"));
+        }
+
         serializedObject.ApplyModifiedProperties();
     }
 }
