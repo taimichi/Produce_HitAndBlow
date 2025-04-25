@@ -22,6 +22,16 @@ public class NumberManager : MonoBehaviour
 
     private void Start()
     {
+        //履歴生成
+        CreateHistoryArea();
+    }
+
+    /// <summary>
+    /// 履歴エリアの生成
+    /// 手数分の履歴と、答えを一つ生成
+    /// </summary>
+    public  void CreateHistoryArea()
+    {
         switch (DifficultyData.DifficultyEntity.nowDifficlt)
         {
             case DifficultyData.Difficult.easy:
@@ -36,19 +46,20 @@ public class NumberManager : MonoBehaviour
                 maxEffot = 10;
                 break;
         }
-        CreateHistoryArea();
-    }
 
-    /// <summary>
-    /// 履歴エリアの生成
-    /// 手数分の履歴と、答えを一つ生成
-    /// </summary>
-    private void CreateHistoryArea()
-    {
+        Historys = new GameObject[maxEffot];
         for(int i = 0; i < maxEffot; i++)
         {
             Historys[i] = Instantiate(HistoryPre, HistoryParent);
         }
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
+    }
+
+    /// <summary>
+    /// 答えの数値を生成
+    /// </summary>
+    private void AnswerGenerate()
+    {
+
     }
 }

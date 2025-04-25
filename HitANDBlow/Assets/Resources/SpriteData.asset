@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: SpriteData
   m_EditorClassIdentifier: 
   NumberSprite:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 8e245c53600db884c8e9aca2feb91a45, type: 3}
+  - {fileID: 21300000, guid: 4f82cf0577b9dfb40b4c0f2f2686356a, type: 3}
+  - {fileID: 21300000, guid: dd4689b022d6f9842b725c7f4db2de99, type: 3}
+  - {fileID: 21300000, guid: 907297dced23da646983d078765f2e0d, type: 3}
+  - {fileID: 21300000, guid: c618b2e32d1a76f41a5434fa4f4ed6a5, type: 3}
+  - {fileID: 21300000, guid: d4f3b50ecc87cfe4083137df2a3089ef, type: 3}
+  - {fileID: 21300000, guid: 7e3910767326ad445a23d8e5d441683d, type: 3}
+  - {fileID: 21300000, guid: 94ec1ba937db0f24abfa922376f42d04, type: 3}
+  - {fileID: 21300000, guid: 682e0704519e58544b284176aeec1da1, type: 3}
+  - {fileID: 21300000, guid: e8454474fe8aad24292c16885fbcd9e0, type: 3}
