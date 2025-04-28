@@ -54,6 +54,9 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             Image buttonImage = this.GetComponent<Image>();
             buttonImage.sprite = SpriteData.SpriteEntity.NumberSprite[number];
         }
+
+        NumberManager numberManager = GameObject.Find("GameCanvas").GetComponent<NumberManager>();
+        numberManager.GetNumberInputScript(this);
     }
 
     public void NumberButtonInput()
@@ -65,7 +68,7 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             {
                 if (numButton != ButtonProperty.None)
                 {
-                    anim.Play("UI_OnTheTouchMove");
+                    //anim.Play("UI_OnTheTouchMove");
                     // Enum‚Ì’l‚²‚Æ‚É‘Î‰‚·‚éŠÖ”‚ğÀs
                     InvokeMatchingMethod(numButton);
                 }
@@ -93,17 +96,18 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     #region Function
     private void Number()
     {
-
+        Debug.Log(number + " ‚ª“ü—Í‚³‚ê‚Ü‚µ‚½");
     }
 
     private void Enter()
     {
-
+        Debug.Log("Œˆ’è‚µ‚Ü‚·");
     }
 
     private void Cancel()
     {
-
+        
+        Debug.Log("1•¶šÁ‚µ‚Ü‚·");
     }
     #endregion
 

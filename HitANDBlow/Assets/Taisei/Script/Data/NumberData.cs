@@ -23,8 +23,10 @@ public class NumberData : ScriptableObject
         }
     }
 
-    //“–‚Ä‚é”š‚Ì”
-    private const int ELEMNT_NUM = 3;
+    /// <summary>
+    /// “–‚Ä‚é”š‚ÌŒ…”
+    /// </summary>
+    public const int ELEMNT_NUM = 3;
 
     /// <summary>
     /// “š‚¦‚Ì”’l‚ğ•Û‘¶‚·‚é”z—ñ
@@ -36,4 +38,13 @@ public class NumberData : ScriptableObject
     /// </summary>
     public int[] inputNumbers = new int[ELEMNT_NUM];
 
+    /// <summary>
+    /// “ü—Í‚µ‚ÄŒˆ’è‚ğ‚µ‚½‰ñ”
+    /// </summary>
+    public int inputCount = 0;
+
+    /// <summary>
+    /// ”’l‚ğ“ü—Í‚µ‚½‰ñ”
+    /// </summary>
+    public int inputNum = 0;
 }
