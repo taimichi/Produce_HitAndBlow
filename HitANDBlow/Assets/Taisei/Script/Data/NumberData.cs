@@ -47,4 +47,9 @@ public class NumberData : ScriptableObject
     /// ”’l‚ğ“ü—Í‚µ‚½‰ñ”
     /// </summary>
     public int inputNum = 0;
+
+    /// <summary>
+    /// ˆê”ÔÅŒã‚É“ü—Í‚³‚ê‚½”’l
+    /// </summary>
+    public int saveNum = -1;
 }

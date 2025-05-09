@@ -28,13 +28,23 @@ public class NumberManager : MonoBehaviour
     //数値入力関連ボタンのスクリプトを入れるリスト
     private List<NumberInput> numberInputs = new List<NumberInput>();
 
+    //エンターボタンのスクリプトがリストの何番目に入っているか
+    private int enterButtonNum = 0;
+    //1つ消すボタンのスクリプトがリストの何番目に入っているか
+    private int cancelButtonNum = 0;
+
     //答えの数値生成用リスト
     private List<int> answerGenerate = new List<int>();
+
+    //ヒットとブローの数
+    private int hitCount = 0;
+    private int blowCount = 0;
+
 
     private void Start()
     {
         //入力、答えの数値初期化
-        NumberReset();
+        NumberAllReset();
 
         //履歴生成
         CreateHistoryArea();
@@ -49,9 +59,56 @@ public class NumberManager : MonoBehaviour
     /// </summary>
     public void NumberUpdate()
     {
+        //ボタンの入力処理
         for(int i= 0; i < numberInputs.Count; i++)
         {
             numberInputs[i].NumberButtonInput();
+        }
+
+        //入力した回数が当てる数字の桁数と同じになった時
+        if (NumberData.InputNumberEntity.inputNum == NumberData.ELEMNT_NUM)
+        {
+            //決定ボタンを表示
+            numberInputs[enterButtonNum].ChangeObjectActive(true);
+        }
+        //入力した回数が当てる数字の桁数じゃないとき
+        else
+        {
+            //決定ボタンを非表示
+            numberInputs[enterButtonNum].ChangeObjectActive(false);
+        }
+
+        //決定ボタンが押されたとき
+        if (numberInputs[enterButtonNum].isEnter)
+        {
+            HBCheck();
+
+            //正解のとき
+            if (AnswerCheck())
+            {
+
+            }
+            //不正解の時
+            else
+            {
+                NextSet();
+            }
+
+            numberInputs[enterButtonNum].isEnter = false;
+        }
+
+        //1つ消すボタンが押されたとき
+        if (numberInputs[cancelButtonNum].isCancel)
+        {
+            for(int i = 0; i < numberInputs.Count; i++)
+            {
+                if(numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+                {
+                    //一番最後に押された数字のボタンを再び押せるようにする
+                    numberInputs[i].NumCancel(NumberData.InputNumberEntity.saveNum);
+                }
+            }
+            numberInputs[cancelButtonNum].isCancel = false;
         }
     }
 
@@ -61,42 +118,126 @@ public class NumberManager : MonoBehaviour
     /// </summary>
     public  void CreateHistoryArea()
     {
+        //手数と入力する数値の種類を設定
         switch (DifficultyData.DifficultyEntity.nowDifficlt)
         {
             case DifficultyData.Difficult.easy:
-                maxEffot = 5;
+                maxEffot = 4;
+                maxInputNumber = 5;
                 break;
 
             case DifficultyData.Difficult.normal:
-                maxEffot = 7;
+                maxEffot = 6;
+                maxInputNumber = 7;
                 break;
 
             case DifficultyData.Difficult.hard:
                 maxEffot = 10;
+                maxInputNumber = 10;
                 break;
         }
-        //最大値、最小値を設定
-        maxInputNumber = maxEffot;
+        //最小値を設定
         minInputNumber = 0;
 
+        for(int i = 0; i < numberInputs.Count; i++)
+        {
+            if(numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+            {
+                numberInputs[i].SetNumberButton(maxInputNumber);
+            }
+        }
+
+        //履歴を表示するオブジェクトを生成
         Historys = new GameObject[maxEffot];
         for(int i = 0; i < maxEffot; i++)
         {
             Historys[i] = Instantiate(HistoryPre, HistoryParent);
         }
+        //答えを表示するオブジェクトを生成
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
+    }
+
+    /// <summary>
+    /// 答えの判定
+    /// </summary>
+    /// <returns>false=不正解 / true=正解</returns>
+    private bool AnswerCheck()
+    {
+        for(int i = 0; i < NumberData.InputNumberEntity.inputNumbers.Length; i++)
+        {
+            if (!NumberData.InputNumberEntity.inputNumbers[i].Equals(NumberData.InputNumberEntity.answerNumbers[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
+    /// ヒットとブロー判定
+    /// </summary>
+    private void HBCheck()
+    {
+        for(int i_input = 0; i_input < NumberData.InputNumberEntity.inputNumbers.Length; i_input++)
+        {
+            for(int i_answer = 0; i_answer < NumberData.InputNumberEntity.answerNumbers.Length; i_answer++)
+            {
+                //数値が一致している時
+                if(NumberData.InputNumberEntity.inputNumbers[i_input] == NumberData.InputNumberEntity.answerNumbers[i_answer])
+                {
+                    //場所も一致している時
+                    if(i_input == i_answer)
+                    {
+                        hitCount++;
+                    }
+                    //場所は一致してないとき
+                    else
+                    {
+                        blowCount++;
+                    }
+
+                }
+            }
+        }
+
+        Debug.Log("H:" + hitCount + " B:" + blowCount);
+    }
+
+    /// <summary>
+    /// 次の入力の準備
+    /// </summary>
+    private void NextSet()
+    {
+        //入力リストに-1を入れて初期化
+        for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
+        {
+            NumberData.InputNumberEntity.inputNumbers[i] = -1;
+        }
+        //入力回数をリセット
+        NumberData.InputNumberEntity.inputNum = 0;
+        //ヒットとブローの数をリセット
+        hitCount = blowCount = 0;
+        //最後に入力した数値をリセット
+        NumberData.InputNumberEntity.saveNum = -1;
     }
 
     /// <summary>
     /// 入力、答えの数値を初期化
     /// </summary>
-    private void NumberReset()
+    private void NumberAllReset()
     {
+        //入力と答えのリストに-1を入れて初期化
         for(int i = 0; i < NumberData.ELEMNT_NUM; i++)
         {
             NumberData.InputNumberEntity.inputNumbers[i] = -1;
             NumberData.InputNumberEntity.answerNumbers[i] = -1;
         }
+        //入力回数と決定を押した回数をリセット
+        NumberData.InputNumberEntity.inputNum = 0;
+        NumberData.InputNumberEntity.inputCount = 0;
+        //最後に入力した数値をリセット
+        NumberData.InputNumberEntity.saveNum = -1;
+
     }
 
     /// <summary>
@@ -104,18 +245,26 @@ public class NumberManager : MonoBehaviour
     /// </summary>
     private void AnswerGenerate()
     {
-        for(int i = minInputNumber; i < maxInputNumber; i++)
+        //答えの数値生成用リストを初期化
+        answerGenerate.Clear();
+        for (int i = minInputNumber; i < maxInputNumber; i++)
         {
             answerGenerate.Add(i);
         }
 
         int count = 0;
+
+        //答えの数値を選択
+        //当てる数値の回数文繰り返す
         while(count < NumberData.ELEMNT_NUM)
         {
+            //数値を抽選
             int indexNumber = Random.Range(minInputNumber, answerGenerate.Count);
 
+            //抽選で選ばれた数値を答えのリストに保存
             NumberData.InputNumberEntity.answerNumbers[count] = answerGenerate[indexNumber];
-            answerGenerate.Remove(indexNumber);
+            //選ばれた数値をリストから削除し、選ばれなくする
+            answerGenerate.Remove(answerGenerate[indexNumber]);
 
             count++;
         }
@@ -123,8 +272,21 @@ public class NumberManager : MonoBehaviour
         Debug.Log("答え表示" + string.Join(" , " , NumberData.InputNumberEntity.answerNumbers));
     }
 
+    /// <summary>
+    /// 数値入力スクリプトを取得し、リストに保存
+    /// </summary>
     public void GetNumberInputScript(NumberInput _numberInput)
     {
         numberInputs.Add(_numberInput);
+        //取得したスクリプトのButtonPropertyがエンターのとき
+        if(_numberInput.numButton == NumberInput.ButtonProperty.Enter)
+        {
+            _numberInput.ChangeObjectActive(false);
+            enterButtonNum = numberInputs.Count - 1;
+        }
+        else if(_numberInput.numButton == NumberInput.ButtonProperty.Cancel)
+        {
+            cancelButtonNum = numberInputs.Count - 1;
+        }
     }
 }

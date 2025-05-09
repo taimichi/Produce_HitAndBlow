@@ -27,4 +27,5 @@ public class SpriteData : ScriptableObject
     /// ”š‚Ì‰æ‘œ‚ğ“ü‚ê‚é”z—ñ
     /// </summary>
     public Sprite[] NumberSprite;
+
 }
