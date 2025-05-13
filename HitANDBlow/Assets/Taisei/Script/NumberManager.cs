@@ -40,8 +40,21 @@ public class NumberManager : MonoBehaviour
     private int hitCount = 0;
     private int blowCount = 0;
 
+    //ゲームが終了したかどうか
+    private bool isGameFinish = false;
+    //ゲームクリアかどうか
+    private bool isGameClear = false;
+
 
     private void Start()
+    {
+
+    }
+
+    /// <summary>
+    /// ゲームを開始するときに呼び出す
+    /// </summary>
+    public void GameStart()
     {
         //入力、答えの数値初期化
         NumberAllReset();
@@ -51,7 +64,6 @@ public class NumberManager : MonoBehaviour
 
         //答え生成
         AnswerGenerate();
-
     }
 
     /// <summary>
@@ -59,56 +71,102 @@ public class NumberManager : MonoBehaviour
     /// </summary>
     public void NumberUpdate()
     {
-        //ボタンの入力処理
-        for(int i= 0; i < numberInputs.Count; i++)
+        if (!isGameFinish)
         {
-            numberInputs[i].NumberButtonInput();
-        }
-
-        //入力した回数が当てる数字の桁数と同じになった時
-        if (NumberData.InputNumberEntity.inputNum == NumberData.ELEMNT_NUM)
-        {
-            //決定ボタンを表示
-            numberInputs[enterButtonNum].ChangeObjectActive(true);
-        }
-        //入力した回数が当てる数字の桁数じゃないとき
-        else
-        {
-            //決定ボタンを非表示
-            numberInputs[enterButtonNum].ChangeObjectActive(false);
-        }
-
-        //決定ボタンが押されたとき
-        if (numberInputs[enterButtonNum].isEnter)
-        {
-            HBCheck();
-
-            //正解のとき
-            if (AnswerCheck())
+            //ボタンの入力処理
+            for (int i = 0; i < numberInputs.Count; i++)
             {
-
+                numberInputs[i].NumberButtonInput();
             }
-            //不正解の時
+
+            //入力した回数が当てる数字の桁数と同じになった時
+            if (NumberData.InputNumberEntity.inputNum == NumberData.ELEMNT_NUM)
+            {
+                //決定ボタンを表示
+                numberInputs[enterButtonNum].ChangeObjectActive(true);
+            }
+            //入力した回数が当てる数字の桁数じゃないとき
             else
             {
-                NextSet();
+                //決定ボタンを非表示
+                numberInputs[enterButtonNum].ChangeObjectActive(false);
             }
 
-            numberInputs[enterButtonNum].isEnter = false;
-        }
-
-        //1つ消すボタンが押されたとき
-        if (numberInputs[cancelButtonNum].isCancel)
-        {
-            for(int i = 0; i < numberInputs.Count; i++)
+            //決定ボタンが押されたとき
+            if (numberInputs[enterButtonNum].isEnter)
             {
-                if(numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+                HBCheck();
+
+                //正解のとき
+                if (AnswerCheck())
                 {
-                    //一番最後に押された数字のボタンを再び押せるようにする
-                    numberInputs[i].NumCancel(NumberData.InputNumberEntity.saveNum);
+                    Debug.Log("正解！");
+                    isGameFinish = true;
+                    isGameClear = true;
                 }
+                //不正解の時
+                else
+                {
+                    Debug.Log("不正解！");
+                    //回数上限に行ってないとき
+                    if (NumberData.InputNumberEntity.inputCount < maxEffot)
+                    {
+                        NextSet();
+                        Debug.Log("次！");
+                    }
+                    //回数上限に行ったとき
+                    else
+                    {
+                        isGameFinish = true;
+                        isGameClear = false;
+                        Debug.Log("終了！");
+                    }
+                }
+
+                numberInputs[enterButtonNum].isEnter = false;
             }
-            numberInputs[cancelButtonNum].isCancel = false;
+            //決定が押されてないとき
+            else
+            {
+                if (NumberData.InputNumberEntity.inputNum - 1 >= 0)
+                {
+                    int nowNum = NumberData.InputNumberEntity.inputNum - 1;
+                    //数値が入力されたとき
+                    if (NumberData.InputNumberEntity.inputNumbers[nowNum] != -1)
+                    {
+                        GameObject historyObj = GetHistoryObj(nowNum);
+                        if (historyObj.TryGetComponent<Image>(out Image historyImage))
+                        {
+                            historyImage.sprite = SpriteData.SpriteEntity.NumberSprite[NumberData.InputNumberEntity.inputNumbers[nowNum]];
+                        }
+                    }
+                }
+
+            }
+
+            //1つ消すボタンが押されたとき
+            if (numberInputs[cancelButtonNum].isCancel)
+            {
+                for (int i = 0; i < numberInputs.Count; i++)
+                {
+                    if (numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+                    {
+                        //一番最後に押された数字のボタンを再び押せるようにする
+                        numberInputs[i].NumCancel(NumberData.InputNumberEntity.saveNum);
+                    }
+                }
+
+                GameObject historyObj = GetHistoryObj(NumberData.InputNumberEntity.inputNum);
+                if (historyObj.TryGetComponent<Image>(out Image historyImage))
+                {
+                    historyImage.sprite = SpriteData.SpriteEntity.NoneNumberSprite;
+                }
+                numberInputs[cancelButtonNum].isCancel = false;
+            }
+        }
+        else
+        {
+            AnswerObj.transform.GetChild(1).gameObject.SetActive(false);
         }
     }
 
@@ -201,6 +259,27 @@ public class NumberManager : MonoBehaviour
         }
 
         Debug.Log("H:" + hitCount + " B:" + blowCount);
+
+        GameObject HBParent = Historys[NumberData.InputNumberEntity.inputCount - 1].transform.GetChild(2).gameObject;
+        Image[] HBGroup = new Image[NumberData.ELEMNT_NUM];
+        for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
+        {
+            HBGroup[i] = HBParent.transform.GetChild(i).gameObject.GetComponent<Image>();
+        }
+
+        int hbNum = 0;
+        //ヒット表示
+        for(int i = 0; i < hitCount; i++)
+        {
+            HBGroup[hbNum].sprite = SpriteData.SpriteEntity.HitBlowSprite[0];
+            hbNum++;
+        }
+        //ブロー表示
+        for(int i = 0; i < blowCount; i++)
+        {
+            HBGroup[hbNum].sprite = SpriteData.SpriteEntity.HitBlowSprite[1];
+            hbNum++;
+        }
     }
 
     /// <summary>
@@ -208,6 +287,14 @@ public class NumberManager : MonoBehaviour
     /// </summary>
     private void NextSet()
     {
+        for (int i = 0; i < numberInputs.Count; i++)
+        {
+            if (numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+            {
+                numberInputs[i].NumCancel();
+            }
+        }
+
         //入力リストに-1を入れて初期化
         for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
         {
@@ -241,6 +328,36 @@ public class NumberManager : MonoBehaviour
     }
 
     /// <summary>
+    /// 履歴の数値を表示するオブジェクトを取得する
+    /// </summary>
+    /// <param name="_num">履歴の数値表示用オブジェクトの何番目か</param>
+    /// <returns>履歴の数値表示用オブジェクト</returns>
+    private GameObject GetHistoryObj(int _num)
+    {
+        GameObject plAnswerParent = Historys[NumberData.InputNumberEntity.inputCount].transform.GetChild(1).gameObject;
+        GameObject[] plAnswer = new GameObject[NumberData.ELEMNT_NUM];
+        for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
+        {
+            plAnswer[i] = plAnswerParent.transform.GetChild(i).gameObject;
+        }
+
+        return plAnswer[_num];
+
+    }
+
+    /// <summary>
+    /// 現在ゲームが続いているか終わっているか
+    /// </summary>
+    /// <returns>false=ゲーム中 / true=ゲーム終了</returns>
+    public bool CheckGameNow() => isGameFinish;
+
+    /// <summary>
+    /// ゲームをクリアしたかどうか
+    /// </summary>
+    /// <returns>false=ゲームオーバー / true=ゲームクリア</returns>
+    public bool CheckGameClear() => isGameClear;
+
+    /// <summary>
     /// 答えの数値を生成
     /// </summary>
     private void AnswerGenerate()
@@ -270,6 +387,20 @@ public class NumberManager : MonoBehaviour
         }
 
         Debug.Log("答え表示" + string.Join(" , " , NumberData.InputNumberEntity.answerNumbers));
+
+        //答えの画像を数値の画像に変更
+        GameObject[] answers = new GameObject[NumberData.ELEMNT_NUM];
+        GameObject answerPar = AnswerObj.transform.GetChild(0).gameObject;
+        for(int i = 0; i < NumberData.ELEMNT_NUM; i++)
+        {
+            answers[i] = answerPar.transform.GetChild(i).gameObject;
+            if(answers[i].TryGetComponent<Image>(out Image answerImage))
+            {
+                //答えの画像を変更
+                answerImage.sprite = SpriteData.SpriteEntity.NumberSprite[NumberData.InputNumberEntity.answerNumbers[i]];
+            }
+
+        }
     }
 
     /// <summary>

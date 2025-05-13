@@ -1,7 +1,7 @@
 using UnityEditor;
 
 [CustomEditor(typeof(NumberInput))]
-public class CustomIncpectorTest : Editor
+public class CustomIncpector_NumberInput : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -21,6 +21,7 @@ public class CustomIncpectorTest : Editor
         if (type == NumberInput.ButtonProperty.Number)
         {
             EditorGUILayout.PropertyField(serializedObject.FindProperty("number"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("UnUseImage"));
         }
 
         serializedObject.ApplyModifiedProperties();

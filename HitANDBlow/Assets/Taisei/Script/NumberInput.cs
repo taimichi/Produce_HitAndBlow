@@ -23,15 +23,19 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
+    //ボタンが使えるか使えないか表す
+    [SerializeField] private GameObject UnUseImage;
+
     // アニメーションの設定
     [SerializeField] Animator anim;
 
     //ボタンに設定する数字の値
     [SerializeField, Range(0, 9)] private int number = 0;
 
-    //エンターが押されたかどうか インスペクターではいじれない
+    //インスペクターではいじれない
+    //エンターが押されたかどうか
     [System.NonSerialized] public bool isEnter = false;
-
+    //一文字消すが押されたかどうか
     [System.NonSerialized] public bool isCancel = false;
 
     //使ってる数字かどうか
@@ -57,6 +61,11 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         NumberManager numberManager = GameObject.Find("GameCanvas").GetComponent<NumberManager>();
         numberManager.GetNumberInputScript(this);
+
+        if(numButton == ButtonProperty.Number)
+        {
+            UnUseImage.SetActive(false);
+        }
     }
 
     private void Start()
@@ -89,6 +98,28 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 }
             }
         }
+
+        //数字ボタンの時
+        if(numButton == ButtonProperty.Number)
+        {
+            //ボタンが使える状態かどうか
+            if (isUseNum)
+            {
+                //使えないよ画像が非表示状態の時
+                if (!UnUseImage.activeSelf)
+                {
+                    UnUseImage.SetActive(true); ;
+                }
+            }
+            else
+            {
+                //使えないよ画像が表示状態の時
+                if (UnUseImage.activeSelf)
+                {
+                    UnUseImage.SetActive(false);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -118,6 +149,7 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     /// <summary>
     /// 使われた数値を使われてない状態に戻す
+    /// 引数に入れた数値と同じ時だけ戻す
     /// </summary>
     /// <param name="_num">使われてる数値数値</param>
     public void NumCancel(int _num)
@@ -126,6 +158,15 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             isUseNum = false;
         }
+    }
+
+    /// <summary>
+    /// 使われた数値を使われていない状態に戻す
+    /// 無条件で戻す
+    /// </summary>
+    public void NumCancel()
+    {
+        isUseNum = false;
     }
 
     private void InvokeMatchingMethod(ButtonProperty kButton)

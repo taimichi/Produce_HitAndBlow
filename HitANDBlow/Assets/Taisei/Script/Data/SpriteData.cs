@@ -28,4 +28,14 @@ public class SpriteData : ScriptableObject
     /// </summary>
     public Sprite[] NumberSprite;
 
+    /// <summary>
+    /// 数値が設定されていないときの画像
+    /// </summary>
+    public Sprite NoneNumberSprite;
+
+    /// <summary>
+    /// ヒットアンドブローの画像を入れる配列
+    /// </summary>
+    public Sprite[] HitBlowSprite;
+
 }

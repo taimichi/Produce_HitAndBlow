@@ -23,3 +23,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 94ec1ba937db0f24abfa922376f42d04, type: 3}
   - {fileID: 21300000, guid: 682e0704519e58544b284176aeec1da1, type: 3}
   - {fileID: 21300000, guid: e8454474fe8aad24292c16885fbcd9e0, type: 3}
+  NoneNumberSprite: {fileID: 21300000, guid: 25dcbea0bba798548b16f21eb33445cb, type: 3}
+  HitBlowSprite:
+  - {fileID: 21300000, guid: 3bbb75b6b62cf234fabb36dcea890aec, type: 3}
+  - {fileID: 21300000, guid: 851258a49da3301418bdbdcea62390d1, type: 3}
