@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
-        GameObject.Find("DifficultyGroup").TryGetComponent<DifficultManager>(out DiffManager);
+        GameObject.Find("Difficult_Result").TryGetComponent<DifficultManager>(out DiffManager);
 
         ResultObj.SetActive(false);
     }
@@ -50,19 +51,44 @@ public class GameManager : MonoBehaviour
             //ゲーム終了時
             else
             {
-                ResultObj.SetActive(true);
-                //ゲームオーバー
-                if (!NumManager.CheckGameClear())
-                {
-                    ResultText.text = "ゲームオーバー！";
-                }
-                //ゲームクリア
-                else
-                {
-                    ResultText.text = "ゲームクリア！";
-                }
+                StartCoroutine(GameFinish());
             }
 
         }
+    }
+
+    private IEnumerator GameFinish()
+    {
+
+        yield return new WaitUntil(() => NumManager.CheckHide());
+
+        ResultObj.SetActive(true);
+
+        //ゲームオーバー
+        if (!NumManager.CheckGameClear())
+        {
+            ResultText.text = "ゲームオーバー！";
+        }
+        //ゲームクリア
+        else
+        {
+            ResultText.text = "ゲームクリア！";
+        }
+
+    }
+
+    /// <summary>
+    /// ボタンで起動
+    /// 難易度選択から始める
+    /// </summary>
+    public void OnOneMoreGame()
+    {
+        isGameStart = false;
+        isGameFinish = false;
+        DiffManager.ResetDifficultPanel();
+        NumManager.HistoryDelete();
+
+        ResultObj.SetActive(false);
+        //SceneManager.LoadScene("GameScene");
     }
 }

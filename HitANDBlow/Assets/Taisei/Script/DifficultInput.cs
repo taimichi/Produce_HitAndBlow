@@ -25,7 +25,7 @@ public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Awake()
     {
-        DifficultManager diffManager = GameObject.Find("DifficultyGroup").GetComponent<DifficultManager>();
+        DifficultManager diffManager = GameObject.Find("Difficult_Result").GetComponent<DifficultManager>();
         diffManager.GetDifficultInput(this);
     }
 

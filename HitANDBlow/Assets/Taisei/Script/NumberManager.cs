@@ -45,6 +45,9 @@ public class NumberManager : MonoBehaviour
     //ゲームクリアかどうか
     private bool isGameClear = false;
 
+    private Image HideAnswer;
+    private bool isHideAnswer = false;
+
 
     private void Start()
     {
@@ -55,7 +58,7 @@ public class NumberManager : MonoBehaviour
     /// ゲームを開始するときに呼び出す
     /// </summary>
     public void GameStart()
-    {
+    {        
         //入力、答えの数値初期化
         NumberAllReset();
 
@@ -64,6 +67,14 @@ public class NumberManager : MonoBehaviour
 
         //答え生成
         AnswerGenerate();
+
+        for(int i = 0; i < numberInputs.Count; i++)
+        {
+            if (numberInputs[i].numButton == NumberInput.ButtonProperty.Number)
+            {
+                numberInputs[i].NumCancel();
+            }
+        }
     }
 
     /// <summary>
@@ -166,7 +177,18 @@ public class NumberManager : MonoBehaviour
         }
         else
         {
-            AnswerObj.transform.GetChild(1).gameObject.SetActive(false);
+            //答えを隠しているオブジェクトを非表示に
+            Color test = HideAnswer.color;
+            float a = test.a;
+            if (a >= 0)
+            {
+                a -= 0.01f;
+                HideAnswer.color = new Color(test.r, test.g, test.b, a);
+            }
+            else
+            {
+                isHideAnswer = true;
+            }
         }
     }
 
@@ -213,6 +235,25 @@ public class NumberManager : MonoBehaviour
         }
         //答えを表示するオブジェクトを生成
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
+        isHideAnswer = false;   
+    }
+
+    /// <summary>
+    /// 履歴と答えを表示するオブジェクトを削除
+    /// </summary>
+    public void HistoryDelete()
+    {
+        isGameClear = false;
+        isGameFinish = false;
+        if (Historys.Length > 0 || Historys != null)
+        {
+            for (int i = 0; i < Historys.Length; i++)
+            {
+
+                Destroy(Historys[i]);
+            }
+            Destroy(AnswerObj);
+        }
     }
 
     /// <summary>
@@ -324,6 +365,11 @@ public class NumberManager : MonoBehaviour
         NumberData.InputNumberEntity.inputCount = 0;
         //最後に入力した数値をリセット
         NumberData.InputNumberEntity.saveNum = -1;
+        //ヒットとブローの数をリセット
+        hitCount = blowCount = 0;
+
+        isGameFinish = false;
+        isGameClear = false;    
 
     }
 
@@ -345,17 +391,6 @@ public class NumberManager : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// 現在ゲームが続いているか終わっているか
-    /// </summary>
-    /// <returns>false=ゲーム中 / true=ゲーム終了</returns>
-    public bool CheckGameNow() => isGameFinish;
-
-    /// <summary>
-    /// ゲームをクリアしたかどうか
-    /// </summary>
-    /// <returns>false=ゲームオーバー / true=ゲームクリア</returns>
-    public bool CheckGameClear() => isGameClear;
 
     /// <summary>
     /// 答えの数値を生成
@@ -401,6 +436,8 @@ public class NumberManager : MonoBehaviour
             }
 
         }
+
+        HideAnswer = AnswerObj.transform.GetChild(1).gameObject.GetComponent<Image>();
     }
 
     /// <summary>
@@ -420,4 +457,20 @@ public class NumberManager : MonoBehaviour
             cancelButtonNum = numberInputs.Count - 1;
         }
     }
+
+    /// <summary>
+    /// 現在ゲームが続いているか終わっているか
+    /// </summary>
+    /// <returns>false=ゲーム中 / true=ゲーム終了</returns>
+    public bool CheckGameNow() => isGameFinish;
+
+    /// <summary>
+    /// ゲームをクリアしたかどうか
+    /// </summary>
+    /// <returns>false=ゲームオーバー / true=ゲームクリア</returns>
+    public bool CheckGameClear() => isGameClear;
+
+    public bool CheckHide() => isHideAnswer;
+
+
 }
