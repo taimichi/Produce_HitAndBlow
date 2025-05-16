@@ -48,6 +48,9 @@ public class NumberManager : MonoBehaviour
     private Image HideAnswer;
     private bool isHideAnswer = false;
 
+    //答えの表示時間
+    private const float ANSWER_DISPLAYTIME = 2f;
+    private float answer_displayCount = 0f;
 
     private void Start()
     {
@@ -178,16 +181,20 @@ public class NumberManager : MonoBehaviour
         else
         {
             //答えを隠しているオブジェクトを非表示に
-            Color test = HideAnswer.color;
-            float a = test.a;
+            Color hideAnswerColor = HideAnswer.color;
+            float a = hideAnswerColor.a;
             if (a >= 0)
             {
                 a -= 0.01f;
-                HideAnswer.color = new Color(test.r, test.g, test.b, a);
+                HideAnswer.color = new Color(hideAnswerColor.r, hideAnswerColor.g, hideAnswerColor.b, a);
             }
             else
             {
-                isHideAnswer = true;
+                if(answer_displayCount >= ANSWER_DISPLAYTIME)
+                {
+                    isHideAnswer = true;
+                }
+                answer_displayCount += Time.deltaTime;
             }
         }
     }
@@ -235,7 +242,8 @@ public class NumberManager : MonoBehaviour
         }
         //答えを表示するオブジェクトを生成
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
-        isHideAnswer = false;   
+        isHideAnswer = false;
+        answer_displayCount = 0;
     }
 
     /// <summary>
@@ -421,7 +429,7 @@ public class NumberManager : MonoBehaviour
             count++;
         }
 
-        Debug.Log("答え表示" + string.Join(" , " , NumberData.InputNumberEntity.answerNumbers));
+        Debug.Log("答え表示\n" + string.Join(" , " , NumberData.InputNumberEntity.answerNumbers));
 
         //答えの画像を数値の画像に変更
         GameObject[] answers = new GameObject[NumberData.ELEMNT_NUM];
@@ -470,6 +478,10 @@ public class NumberManager : MonoBehaviour
     /// <returns>false=ゲームオーバー / true=ゲームクリア</returns>
     public bool CheckGameClear() => isGameClear;
 
+    /// <summary>
+    /// 答えの表示が出来たかどうか
+    /// </summary>
+    /// <returns>false=表示途中 / true=表示終了</returns>
     public bool CheckHide() => isHideAnswer;
 
 

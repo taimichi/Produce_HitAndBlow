@@ -29,11 +29,6 @@ public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         diffManager.GetDifficultInput(this);
     }
 
-    void Start()
-    {
-        
-    }
-
     #region UIOnOff
     public void OnPointerEnter(PointerEventData eventData)
     {

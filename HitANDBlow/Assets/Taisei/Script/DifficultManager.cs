@@ -6,7 +6,7 @@ public class DifficultManager : MonoBehaviour
 {
     private List<DifficultInput> diffInputs = new List<DifficultInput>();
 
-    [SerializeField] private GameObject DifficultPanel;
+    [SerializeField] private CanvasGroup diffPanel;
 
     //難易度選択を開始したかどうか
     private bool isStartSelect = false;
@@ -52,7 +52,10 @@ public class DifficultManager : MonoBehaviour
         DifficultyData.DifficultyEntity.nowDifficlt = DifficultyData.Difficult.none;
         isStartSelect = false;
         isSelect = false;
-        DifficultPanel.SetActive(true); 
+
+        diffPanel.alpha = 1;
+        diffPanel.interactable = true;
+        diffPanel.blocksRaycasts = true;
     }
 
     /// <summary>
@@ -62,12 +65,15 @@ public class DifficultManager : MonoBehaviour
     {
         if(DifficultyData.DifficultyEntity.nowDifficlt != DifficultyData.Difficult.none)
         {
-            DifficultPanel.SetActive(false);
+            diffPanel.alpha = 0;
+            diffPanel.interactable = false;
+            diffPanel.blocksRaycasts = false;
+
             isSelect = true;
         }
 
         //難易度が選択され、パネルが非表示になったら、以降の処理に進む
-        yield return new WaitUntil(() => DifficultPanel.activeSelf == false);
+        yield return new WaitUntil(() => diffPanel.alpha == 0);
 
         isStartSelect = true;
 

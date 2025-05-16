@@ -2575,7 +2575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 966836ec131e6d94d877ebc90e13e574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DifficultPanel: {fileID: 1134214288}
+  diffPanel: {fileID: 1134214292}
 --- !u!1 &758168062
 GameObject:
   m_ObjectHideFlags: 0
@@ -3654,6 +3654,7 @@ GameObject:
   - component: {fileID: 1134214289}
   - component: {fileID: 1134214291}
   - component: {fileID: 1134214290}
+  - component: {fileID: 1134214292}
   m_Layer: 5
   m_Name: DifficultyPanel
   m_TagString: Untagged
@@ -3720,6 +3721,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1134214288}
   m_CullTransparentMesh: 1
+--- !u!225 &1134214292
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134214288}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1219655579
 GameObject:
   m_ObjectHideFlags: 0

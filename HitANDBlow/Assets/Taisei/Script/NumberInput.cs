@@ -131,6 +131,10 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             ChangeObjectActive(false);
         }
+        else
+        {
+            ChangeObjectActive(true);
+        }
     }
 
     /// <summary>

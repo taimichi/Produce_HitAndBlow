@@ -14,8 +14,13 @@ public class GameManager : MonoBehaviour
     //ゲームが終了したかどうか
     private bool isGameFinish = false;
 
+    //結果表示するときのオブジェクト
     [SerializeField] private GameObject ResultObj;
+    //結果表示のテキスト
     [SerializeField] private Text ResultText;
+
+    bool test = false;
+
 
     void Start()
     {
@@ -47,6 +52,7 @@ public class GameManager : MonoBehaviour
             if (!isGameFinish)
             {
                 isGameFinish = NumManager.CheckGameNow();
+                test = false;
             }
             //ゲーム終了時
             else
@@ -60,19 +66,24 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameFinish()
     {
 
-        yield return new WaitUntil(() => NumManager.CheckHide());
+        yield return new WaitUntil(() => NumManager.CheckHide() == true);
 
-        ResultObj.SetActive(true);
+        if (!test)
+        {
+            ResultObj.SetActive(true);
 
-        //ゲームオーバー
-        if (!NumManager.CheckGameClear())
-        {
-            ResultText.text = "ゲームオーバー！";
-        }
-        //ゲームクリア
-        else
-        {
-            ResultText.text = "ゲームクリア！";
+            //ゲームオーバー
+            if (!NumManager.CheckGameClear())
+            {
+                ResultText.text = "ゲームオーバー！";
+            }
+            //ゲームクリア
+            else
+            {
+                ResultText.text = "ゲームクリア！";
+            }
+
+            test = true;
         }
 
     }
@@ -89,6 +100,5 @@ public class GameManager : MonoBehaviour
         NumManager.HistoryDelete();
 
         ResultObj.SetActive(false);
-        //SceneManager.LoadScene("GameScene");
     }
 }
