@@ -12,6 +12,9 @@ public class NumberManager : MonoBehaviour
     //履歴の親オブジェクト
     [SerializeField] private Transform HistoryParent;
 
+    //ヒットブローが0の時表示するオブジェクト
+    [SerializeField] private GameObject NothingObj;
+
     //指定の手数
     private int maxEffot = 0;
 
@@ -244,6 +247,8 @@ public class NumberManager : MonoBehaviour
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
         isHideAnswer = false;
         answer_displayCount = 0;
+
+        FrameSet();
     }
 
     /// <summary>
@@ -309,10 +314,13 @@ public class NumberManager : MonoBehaviour
 
         Debug.Log("H:" + hitCount + " B:" + blowCount);
 
+        //現在の履歴のヒットブローを表示するオブジェクト取得
         GameObject HBParent = Historys[NumberData.InputNumberEntity.inputCount - 1].transform.GetChild(2).gameObject;
+        //ヒットブローを表示するImageオブジェクトの配列
         Image[] HBGroup = new Image[NumberData.ELEMNT_NUM];
         for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
         {
+            //Imageコンポーネントを取得し、配列に入れる
             HBGroup[i] = HBParent.transform.GetChild(i).gameObject.GetComponent<Image>();
         }
 
@@ -329,6 +337,12 @@ public class NumberManager : MonoBehaviour
             HBGroup[hbNum].sprite = SpriteData.SpriteEntity.HitBlowSprite[1];
             hbNum++;
         }
+
+        //ヒット、ブローが両方0の時
+        if(hitCount == 0 && blowCount == 0)
+        {
+            Instantiate(NothingObj, HBParent.transform);
+        }
     }
 
     /// <summary>
@@ -344,6 +358,8 @@ public class NumberManager : MonoBehaviour
             }
         }
 
+        FrameSet();
+
         //入力リストに-1を入れて初期化
         for (int i = 0; i < NumberData.ELEMNT_NUM; i++)
         {
@@ -355,6 +371,26 @@ public class NumberManager : MonoBehaviour
         hitCount = blowCount = 0;
         //最後に入力した数値をリセット
         NumberData.InputNumberEntity.saveNum = -1;
+    }
+
+    /// <summary>
+    /// 現在の履歴の位置に枠を表示
+    /// </summary>
+    private void FrameSet()
+    {
+        //履歴から枠を取得
+        GameObject Frame = Historys[NumberData.InputNumberEntity.inputCount].transform.GetChild(3).gameObject;
+        //枠を表示
+        Frame.SetActive(true);
+
+        //一番最初じゃないとき
+        if(NumberData.InputNumberEntity.inputCount > 0)
+        {
+            //前回の枠を取得
+            GameObject beforeFrame = Historys[NumberData.InputNumberEntity.inputCount - 1].transform.GetChild(3).gameObject;
+            //前回の枠を非表示
+            beforeFrame.SetActive(false);
+        }
     }
 
     /// <summary>

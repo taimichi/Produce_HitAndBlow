@@ -35,6 +35,7 @@ public class SpriteData : ScriptableObject
 
     /// <summary>
     /// ヒットアンドブローの画像を入れる配列
+    /// 0=ヒット / 1=ブロー
     /// </summary>
     public Sprite[] HitBlowSprite;
 

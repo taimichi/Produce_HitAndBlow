@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DifficultManager : MonoBehaviour
+/// <summary>
+/// 難易度と結果関連
+/// </summary>
+public class DifficultResultManager : MonoBehaviour
 {
+    #region Difficult
     private List<DifficultInput> diffInputs = new List<DifficultInput>();
 
     [SerializeField] private CanvasGroup diffPanel;
@@ -13,6 +17,12 @@ public class DifficultManager : MonoBehaviour
 
     //難易度を選択したかどうか
     [System.NonSerialized] public bool isSelect = false;
+
+    #endregion
+
+    #region Result
+    private List<ResultInput> resuInputs = new List<ResultInput>();
+    #endregion
 
     void Start()
     {
@@ -37,11 +47,27 @@ public class DifficultManager : MonoBehaviour
     }
 
     /// <summary>
+    /// リザルト関連の更新関数
+    /// </summary>
+    public void ResultUpdate()
+    {
+        for(int i = 0; i < resuInputs.Count; i++)
+        {
+            resuInputs[i].ResultButtonInput();
+        }
+    }
+
+    /// <summary>
     /// 難易度入力スクリプトを取得
     /// </summary>
     public void GetDifficultInput(DifficultInput _getDifficultInput)
     {
         diffInputs.Add(_getDifficultInput);
+    }
+
+    public void GetResultInput(ResultInput _getResultInput)
+    {
+        resuInputs.Add(_getResultInput);
     }
 
     /// <summary>

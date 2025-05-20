@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     private NumberManager NumManager;
-    private DifficultManager DiffManager;
+    private DifficultResultManager DiffResuManager;
 
     //ゲームが開始したかどうか
     private bool isGameStart = false;
@@ -19,13 +19,14 @@ public class GameManager : MonoBehaviour
     //結果表示のテキスト
     [SerializeField] private Text ResultText;
 
-    bool test = false;
+    //一度プレイしたかどうか
+    private bool isOnePlay = false;
 
 
     void Start()
     {
         GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
-        GameObject.Find("Difficult_Result").TryGetComponent<DifficultManager>(out DiffManager);
+        GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DiffResuManager);
 
         ResultObj.SetActive(false);
     }
@@ -35,10 +36,10 @@ public class GameManager : MonoBehaviour
         //ゲーム開始前
         if (!isGameStart)
         {
-            DiffManager.DifficultUpdate();
+            DiffResuManager.DifficultUpdate();
 
             //難易度が選択されたとき
-            if (DiffManager.isSelect)
+            if (DiffResuManager.isSelect)
             {
                 NumManager.GameStart();
                 isGameStart = true;
@@ -52,12 +53,14 @@ public class GameManager : MonoBehaviour
             if (!isGameFinish)
             {
                 isGameFinish = NumManager.CheckGameNow();
-                test = false;
+                isOnePlay = false;
             }
             //ゲーム終了時
             else
             {
                 StartCoroutine(GameFinish());
+
+                DiffResuManager.ResultUpdate();
             }
 
         }
@@ -68,7 +71,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitUntil(() => NumManager.CheckHide() == true);
 
-        if (!test)
+        if (!isOnePlay)
         {
             ResultObj.SetActive(true);
 
@@ -83,7 +86,7 @@ public class GameManager : MonoBehaviour
                 ResultText.text = "ゲームクリア！";
             }
 
-            test = true;
+            isOnePlay = true;
         }
 
     }
@@ -92,13 +95,19 @@ public class GameManager : MonoBehaviour
     /// ボタンで起動
     /// 難易度選択から始める
     /// </summary>
-    public void OnOneMoreGame()
+    public void OneMoreGame()
     {
         isGameStart = false;
         isGameFinish = false;
-        DiffManager.ResetDifficultPanel();
+        DiffResuManager.ResetDifficultPanel();
         NumManager.HistoryDelete();
 
         ResultObj.SetActive(false);
+    }
+
+    public void GameEnd()
+    {
+        GameEnd gameEnd = new GameEnd();
+        gameEnd.EndButton();
     }
 }
