@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Taisei/Scene/Title.unity
     guid: 077152b497ca33a49a7848c27ca6e4a3
   - enabled: 1
-    path: Assets/Taisei/Scene/GameScene.unity
+    path: Assets/Taisei/Scene/Game.unity
     guid: 870865eda10132a49b65133677cc5cdd
   m_configObjects: {}
