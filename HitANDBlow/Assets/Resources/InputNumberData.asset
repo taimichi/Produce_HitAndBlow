@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca0c985684150149bcccc3ca303aff0, type: 3}
   m_Name: InputNumberData
   m_EditorClassIdentifier: 
-  answerNumbers: 060000000700000002000000
+  answerNumbers: 010000000300000000000000
   inputNumbers: ffffffffffffffffffffffff
   inputCount: 0
   inputNum: 0
+  saveNum: -1

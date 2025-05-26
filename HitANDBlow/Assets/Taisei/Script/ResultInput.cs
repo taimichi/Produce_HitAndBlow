@@ -1,17 +1,18 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
-public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ResultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // ボタンの種類を設定
     public enum ButtonProperty
     {
         None,         // なしの状態
-        Easy,
-        Normal,
-        Hard,
+        OneMore,
+        Exit,
+
     }
     // 基本的にはNoneで設定して使うときに変更一種類のみに設定すること
     [Header("ボタンの種類選択")] public ButtonProperty numButton = ButtonProperty.None;
@@ -20,10 +21,14 @@ public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
+    private GameManager GM;
+
     private void Awake()
     {
-        DifficultResultManager diffManager = GameObject.Find("Difficult_Result").GetComponent<DifficultResultManager>();
-        diffManager.GetDifficultInput(this);
+        GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DifficultResultManager DifResMG);
+        DifResMG.GetResultInput(this);
+
+        GM = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     #region UIOnOff
@@ -42,7 +47,7 @@ public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
     #endregion
 
-    public void DifficultButtonInput()
+    public void ResultButtonInput()
     {
         // 触れた状態で左クリックを押したら処理
         if (nowSelectObj.activeSelf)
@@ -77,22 +82,20 @@ public class DifficultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
 
     #region Function
-    private void Easy()
+    /// <summary>
+    /// もう一度
+    /// </summary>
+    private void OneMore()
     {
-        DifficultyData.DifficultyEntity.nowDifficlt = DifficultyData.Difficult.easy;
-        Debug.Log("難易度を簡単に設定");
+        GM.OneMoreGame();
     }
 
-    private void Normal()
+    /// <summary>
+    /// ゲーム終了
+    /// </summary>
+    private void Exit()
     {
-        DifficultyData.DifficultyEntity.nowDifficlt = DifficultyData.Difficult.normal;
-        Debug.Log("難易度を普通に設定");
-    }
-
-    private void Hard()
-    {
-        DifficultyData.DifficultyEntity.nowDifficlt = DifficultyData.Difficult.hard;
-        Debug.Log("難易度を難しいに設定");
+        GM.GameEnd();
     }
     #endregion
 
