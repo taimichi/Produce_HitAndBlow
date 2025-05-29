@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2456b3b05b2e42a4ea2accb7b8553bc3, type: 3}
   m_Name: Guide_4
   m_EditorClassIdentifier: 
-  guideSprite: {fileID: 0}
+  guideSprite: {fileID: 21300000, guid: 4b594bbc12b21d14297d7c93c4c6c6db, type: 3}
   Text: "<r=\u306B\u3085\u3046\u308A\u3087\u304F>\u5165\u529B</r>\u3057\u305F<r=\u3059\u3046\u3058>\u6570\u5B57</r>\u306B<r=\u305F\u3044>\u5BFE</r>\u3057\u3066\u3001<r=\u3064\u304E>\u6B21</r>\u306E2<r=\u3057\u3085\u308B\u3044>\u7A2E\u985E</r>\u306E\u30D2\u30F3\u30C8\u304C<r=\u304B\u3048>\u8FD4</r>\u3063\u3066\u304D\u307E\u3059\u3002"
