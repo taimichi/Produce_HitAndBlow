@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private NumberManager NumManager;
     private DifficultResultManager DiffResuManager;
     private TitleManager titleManager;
+    private GuideManager guideManager;
 
     //ゲームが開始したかどうか
     private bool isGameStart = false;
@@ -60,6 +61,7 @@ public class GameManager : MonoBehaviour
                 ResultObj.SetActive(false);
                 break;
         }
+        GameObject.Find("GuideCanvas").TryGetComponent<GuideManager>(out guideManager);
     }
 
     void Update()
@@ -76,7 +78,12 @@ public class GameManager : MonoBehaviour
             case MANAGER_MODE.game:
                 GameUpdate();
                 break;
+        }
 
+        //ルール説明画面が表示状態の時
+        if (guideManager.CheckGuideOnOff())
+        {
+            guideManager.GuideUpdata();
         }
     }
 

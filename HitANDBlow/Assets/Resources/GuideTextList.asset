@@ -12,4 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd13ef6bfb571844d89628879a3d8758, type: 3}
   m_Name: GuideTextList
   m_EditorClassIdentifier: 
-  guideTextList: []
+  guideTextList:
+  - {fileID: 11400000, guid: 8b4133040e2b51742af566a9b3f9d74e, type: 2}
+  - {fileID: 11400000, guid: 3790f579ab3f96e419984a9cc6afbd4f, type: 2}
+  - {fileID: 11400000, guid: 8986de41e63a7474aada839f8fd609e7, type: 2}
+  - {fileID: 11400000, guid: 28c88b1258a49374ebfda92a8def95f4, type: 2}
+  - {fileID: 11400000, guid: 5b63cec9353f4a5488a6375c9027dc17, type: 2}
+  - {fileID: 11400000, guid: a36c0ba1420b3414cb71aa55a418f123, type: 2}
+  - {fileID: 11400000, guid: 9bce631af2d95c34fa57af80d9806a9d, type: 2}
+  - {fileID: 11400000, guid: 47779b9663f75b947b6745ce6ab033ec, type: 2}
+  - {fileID: 11400000, guid: 5c5655bb9086ff94c8b22fd80ff1ebce, type: 2}
+  - {fileID: 11400000, guid: 83fdb37382f7b574d97dd5cb204336b8, type: 2}
