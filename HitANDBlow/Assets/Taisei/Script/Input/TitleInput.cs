@@ -92,6 +92,7 @@ public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         GameObject.Find("GuideCanvas").TryGetComponent<GuideManager>(out GuideManager guide);
         guide.ChangeGuideActive(true);
+        guide.isPageChange = true;
     }
     #endregion
 }

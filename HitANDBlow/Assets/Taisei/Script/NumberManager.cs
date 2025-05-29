@@ -242,6 +242,10 @@ public class NumberManager : MonoBehaviour
         for(int i = 0; i < maxEffot; i++)
         {
             Historys[i] = Instantiate(HistoryPre, HistoryParent);
+
+            GameObject historyCountObj = Historys[i].transform.GetChild(0).gameObject;
+            Text historyCountText = historyCountObj.GetComponent<Text>();
+            historyCountText.text = (i + 1).ToString();
         }
         //答えを表示するオブジェクトを生成
         AnswerObj = Instantiate(AnswerPre, HistoryParent);
