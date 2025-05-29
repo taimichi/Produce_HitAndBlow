@@ -5,6 +5,8 @@ using UnityEngine;
 public class TitleManager : MonoBehaviour
 {
     private List<TitleInput> titleInputs = new List<TitleInput>();
+
+    [SerializeField] private GameObject GuideObj;
     
     void Start()
     {

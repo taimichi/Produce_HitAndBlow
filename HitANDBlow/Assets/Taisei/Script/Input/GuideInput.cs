@@ -1,17 +1,20 @@
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+
+public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // ボタンの種類を設定
     public enum ButtonProperty
     {
         None,         // なしの状態
-        GameStart,
-        GameEnd,
-        Guide,
+        Close,
+        Left,
+        Right,
+
     }
     // 基本的にはNoneで設定して使うときに変更一種類のみに設定すること
     [Header("ボタンの種類選択")] public ButtonProperty numButton = ButtonProperty.None;
@@ -20,10 +23,12 @@ public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
+    private GuideManager guideMG;
+
     private void Awake()
     {
-        TitleManager manager = GameObject.Find("GameManager").GetComponent<TitleManager>();
-        manager.GetTitleInput(this);
+        guideMG = GameObject.Find("GuideCanvas").GetComponent<GuideManager>();
+        guideMG.GetGuideInput(this);
     }
 
     #region UIOnOff
@@ -42,7 +47,7 @@ public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
     #endregion
 
-    public void TitleButtonInput()
+    public void GuideButtonInput()
     {
         // 触れた状態で左クリックを押したら処理
         if (nowSelectObj.activeSelf)
@@ -77,21 +82,25 @@ public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
 
     #region Function
-    private void GameStart()
+    private void Close()
     {
-        SceneManager.LoadScene("Game");
+        guideMG.ChangeGuideActive(false);
     }
 
-    private void GameEnd()
+    private void Left()
     {
-        GameEnd gameEnd = new GameEnd();
-        gameEnd.EndButton();
+        if(guideMG.nowGuidePage >= 0)
+        {
+            guideMG.nowGuidePage--;
+        }
     }
 
-    private void Guide()
+    private void Right()
     {
-        GameObject.Find("GuideCanvas").TryGetComponent<GuideManager>(out GuideManager guide);
-        guide.ChangeGuideActive(true);
+        if(guideMG.nowGuidePage < guideMG.maxGuidePage)
+        {
+            guideMG.nowGuidePage++;
+        }
     }
     #endregion
 }
