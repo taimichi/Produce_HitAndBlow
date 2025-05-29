@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class ResultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -95,7 +96,7 @@ public class ResultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     /// </summary>
     private void Exit()
     {
-        GM.GameEnd();
+        SceneManager.LoadScene("Title");
     }
     #endregion
 

@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 {
     private NumberManager NumManager;
     private DifficultResultManager DiffResuManager;
+    private TitleManager titleManager;
 
     //ゲームが開始したかどうか
     private bool isGameStart = false;
@@ -22,16 +23,75 @@ public class GameManager : MonoBehaviour
     //一度プレイしたかどうか
     private bool isOnePlay = false;
 
+    private string nowSceneName = "";
+
+    private enum MANAGER_MODE
+    {
+        none,
+        title,
+        game,
+    }
+    private MANAGER_MODE nowMode = MANAGER_MODE.none;
 
     void Start()
     {
-        GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
-        GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DiffResuManager);
+        //現在のシーン名を取得
+        nowSceneName = SceneManager.GetActiveScene().name;
 
-        ResultObj.SetActive(false);
+        switch (nowSceneName)
+        {
+            default:
+                nowMode = MANAGER_MODE.none;
+                break;
+
+            //タイトルシーンの時
+            case "Title":
+                nowMode = MANAGER_MODE.title;
+                titleManager = this.gameObject.GetComponent<TitleManager>();
+                break;
+
+            //ゲームシーンの時
+            case "Game":
+                nowMode = MANAGER_MODE.game;
+
+                GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
+                GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DiffResuManager);
+
+                ResultObj.SetActive(false);
+                break;
+        }
     }
 
     void Update()
+    {
+        switch (nowMode)
+        {
+            default:
+                break;
+
+            case MANAGER_MODE.title:
+                TitleUpdate();
+                break;
+
+            case MANAGER_MODE.game:
+                GameUpdate();
+                break;
+
+        }
+    }
+
+    /// <summary>
+    /// タイトルシーンのアップデート
+    /// </summary>
+    private void TitleUpdate()
+    {
+        titleManager.TitleUpdate();
+    }
+
+    /// <summary>
+    /// ゲームシーンのアップデート
+    /// </summary>
+    private void GameUpdate()
     {
         //ゲーム開始前
         if (!isGameStart)
@@ -62,7 +122,6 @@ public class GameManager : MonoBehaviour
 
                 DiffResuManager.ResultUpdate();
             }
-
         }
     }
 
@@ -105,9 +164,4 @@ public class GameManager : MonoBehaviour
         ResultObj.SetActive(false);
     }
 
-    public void GameEnd()
-    {
-        GameEnd gameEnd = new GameEnd();
-        gameEnd.EndButton();
-    }
 }
