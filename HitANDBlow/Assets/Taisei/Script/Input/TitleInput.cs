@@ -22,8 +22,7 @@ public class TitleInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void Awake()
     {
-        TitleManager manager = GameObject.Find("GameManager").GetComponent<TitleManager>();
-        manager.GetTitleInput(this);
+        TitleManager.Instance.GetTitleInput(this);
     }
 
     #region UIOnOff

@@ -27,7 +27,7 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void Awake()
     {
-        guideMG = GameObject.Find("GuideCanvas").GetComponent<GuideManager>();
+        guideMG = GuideManager.Instance;
         guideMG.GetGuideInput(this);
     }
 

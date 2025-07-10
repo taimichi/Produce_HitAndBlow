@@ -48,16 +48,16 @@ public class GameManager : MonoBehaviour
             //タイトルシーンの時
             case "Title":
                 nowMode = MANAGER_MODE.title;
-                titleManager = this.gameObject.GetComponent<TitleManager>();
-                GameObject.Find("GuideCanvas").TryGetComponent<GuideManager>(out guideManager);
+                titleManager = TitleManager.Instance;
+                guideManager = GuideManager.Instance;
                 break;
 
             //ゲームシーンの時
             case "Game":
                 nowMode = MANAGER_MODE.game;
 
-                GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
-                GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DiffResuManager);
+                NumManager = NumberManager.Instance;
+                DiffResuManager = DifficultResultManager.Instance;
 
                 ResultObj.SetActive(false);
                 break;

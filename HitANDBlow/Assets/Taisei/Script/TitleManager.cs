@@ -4,10 +4,30 @@ using UnityEngine;
 
 public class TitleManager : MonoBehaviour
 {
+    private static TitleManager instance;
+    public static TitleManager Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = FindObjectOfType<TitleManager>();
+            }
+            return instance;
+        }
+    }
+
     private List<TitleInput> titleInputs = new List<TitleInput>();
 
-    [SerializeField] private GameObject GuideObj;
-    
+    private void Awake()
+    {
+        if(this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+    }
+
     void Start()
     {
         

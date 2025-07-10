@@ -5,6 +5,19 @@ using UnityEngine.UI;
 
 public class GuideManager : MonoBehaviour
 {
+    private static GuideManager instance;
+    public static GuideManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<GuideManager>();
+            }
+            return instance;
+        }
+    }
+
     [SerializeField] private GameObject GuidePanel;
     [SerializeField] private RubyText guideText;
     [SerializeField] private Image GuideImage;
@@ -21,6 +34,15 @@ public class GuideManager : MonoBehaviour
     [SerializeField] private Image LeftButton;
     [SerializeField] private Image RightButton;
 
+
+    private void Awake()
+    {
+        if (this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+    }
 
     void Start()
     {
