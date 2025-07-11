@@ -26,8 +26,7 @@ public class ResultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Awake()
     {
-        GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DifficultResultManager DifResMG);
-        DifResMG.GetResultInput(this);
+        DifficultResultManager.Instance.GetResultInput(this);
 
         GM = GameObject.Find("GameManager").GetComponent<GameManager>();
     }

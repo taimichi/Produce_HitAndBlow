@@ -5,6 +5,19 @@ using UnityEngine.UI;
 
 public class NumberManager : MonoBehaviour
 {
+    private static NumberManager instance;
+    public static NumberManager Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = FindObjectOfType<NumberManager>();
+            }
+            return instance;
+        }
+    }
+
     //履歴用のプレハブ
     [SerializeField] private GameObject HistoryPre;
     //答え表示用のプレハブ
@@ -54,6 +67,15 @@ public class NumberManager : MonoBehaviour
     //答えの表示時間
     private const float ANSWER_DISPLAYTIME = 2f;
     private float answer_displayCount = 0f;
+
+    private void Awake()
+    {
+        if(this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+    }
 
     private void Start()
     {
@@ -242,6 +264,10 @@ public class NumberManager : MonoBehaviour
         for(int i = 0; i < maxEffot; i++)
         {
             Historys[i] = Instantiate(HistoryPre, HistoryParent);
+
+            GameObject historyCountObj = Historys[i].transform.GetChild(0).gameObject;
+            Text historyCountText = historyCountObj.GetComponent<Text>();
+            historyCountText.text = (i + 1).ToString();
         }
         //答えを表示するオブジェクトを生成
         AnswerObj = Instantiate(AnswerPre, HistoryParent);

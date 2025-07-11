@@ -7,6 +7,19 @@ using UnityEngine;
 /// </summary>
 public class DifficultResultManager : MonoBehaviour
 {
+    private static DifficultResultManager instance;
+    public static DifficultResultManager Instance
+    {
+        get
+        {
+            if(instance == null)
+            {
+                instance = FindObjectOfType<DifficultResultManager>();
+            }
+            return instance;
+        }
+    }
+
     #region Difficult
     private List<DifficultInput> diffInputs = new List<DifficultInput>();
 
@@ -23,6 +36,15 @@ public class DifficultResultManager : MonoBehaviour
     #region Result
     private List<ResultInput> resuInputs = new List<ResultInput>();
     #endregion
+
+    private void Awake()
+    {
+        if(this != Instance)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+    }
 
     void Start()
     {

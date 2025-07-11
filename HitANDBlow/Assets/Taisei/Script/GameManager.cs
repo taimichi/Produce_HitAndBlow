@@ -48,20 +48,20 @@ public class GameManager : MonoBehaviour
             //タイトルシーンの時
             case "Title":
                 nowMode = MANAGER_MODE.title;
-                titleManager = this.gameObject.GetComponent<TitleManager>();
+                titleManager = TitleManager.Instance;
+                guideManager = GuideManager.Instance;
                 break;
 
             //ゲームシーンの時
             case "Game":
                 nowMode = MANAGER_MODE.game;
 
-                GameObject.Find("GameCanvas").TryGetComponent<NumberManager>(out NumManager);
-                GameObject.Find("Difficult_Result").TryGetComponent<DifficultResultManager>(out DiffResuManager);
+                NumManager = NumberManager.Instance;
+                DiffResuManager = DifficultResultManager.Instance;
 
                 ResultObj.SetActive(false);
                 break;
         }
-        GameObject.Find("GuideCanvas").TryGetComponent<GuideManager>(out guideManager);
     }
 
     void Update()
@@ -73,6 +73,11 @@ public class GameManager : MonoBehaviour
 
             case MANAGER_MODE.title:
                 TitleUpdate();
+                //ルール説明画面が表示状態の時
+                if (guideManager.CheckGuideOnOff())
+                {
+                    guideManager.GuideUpdata();
+                }
                 break;
 
             case MANAGER_MODE.game:
@@ -80,11 +85,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        //ルール説明画面が表示状態の時
-        if (guideManager.CheckGuideOnOff())
-        {
-            guideManager.GuideUpdata();
-        }
     }
 
     /// <summary>

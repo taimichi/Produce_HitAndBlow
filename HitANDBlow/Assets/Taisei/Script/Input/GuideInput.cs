@@ -27,7 +27,7 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void Awake()
     {
-        guideMG = GameObject.Find("GuideCanvas").GetComponent<GuideManager>();
+        guideMG = GuideManager.Instance;
         guideMG.GetGuideInput(this);
     }
 
@@ -84,22 +84,26 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     #region Function
     private void Close()
     {
+        guideMG.isPageChange = false;
+        nowSelectObj.SetActive(false);
         guideMG.ChangeGuideActive(false);
     }
 
     private void Left()
     {
-        if(guideMG.nowGuidePage >= 0)
+        if(guideMG.nowGuidePage > 0)
         {
             guideMG.nowGuidePage--;
+            guideMG.isPageChange = true;    
         }
     }
 
     private void Right()
     {
-        if(guideMG.nowGuidePage < guideMG.maxGuidePage)
+        if(guideMG.nowGuidePage < guideMG.maxGuidePage - 1)
         {
             guideMG.nowGuidePage++;
+            guideMG.isPageChange = true;    
         }
     }
     #endregion

@@ -57,8 +57,7 @@ public class NumberInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void Awake()
     {
-        NumberManager numberManager = GameObject.Find("GameCanvas").GetComponent<NumberManager>();
-        numberManager.GetNumberInputScript(this);
+        NumberManager.Instance.GetNumberInputScript(this);
 
         if(numButton == ButtonProperty.Number)
         {
