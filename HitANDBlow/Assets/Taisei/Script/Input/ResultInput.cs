@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+//リザルト用ボタンスクリプト
 public class ResultInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // ボタンの種類を設定
