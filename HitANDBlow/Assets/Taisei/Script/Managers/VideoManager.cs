@@ -62,7 +62,9 @@ public class VideoManager : MonoBehaviour
         videoPlayer.Play();
         videoPlayer.Pause();
 
+        //タイマーを初期化
         timer = 0f;
+        //動画再生フラグ、フェードフラグを初期化
         isPlayVideo = false;
         isFade = false;
     }
@@ -78,28 +80,22 @@ public class VideoManager : MonoBehaviour
             //待機時間を超えた時
             if (timer >= waitTime)
             {
-                if (!video.activeSelf)
+                //一度だけ　フェードインが開始されていないとき
+                if (!isFade)
                 {
-                    //一度だけ　フェードインが開始されていないとき
-                    if (!isFade)
+                    //フェードイン開始
+                    //フェードインが終わったらビデオを映すオブジェクトを表示
+                    fade.FadeIn(fadeTime, () =>
                     {
-                        //フェードイン開始
-                        //フェードインが終わったらビデオを映すオブジェクトを表示
-                        fade.FadeIn(fadeTime, () =>
-                        {
-                            video.SetActive(true);
-                            videoPlayer.loopPointReached += LoopPointReached;
-                            //フェードアウト開始
-                            //フェードアウトが終わったらビデオを開始
-                            fade.FadeOut(fadeTime, () => videoPlayer.Play());
-                            isPlayVideo = true;
+                        video.SetActive(true);
+                        videoPlayer.loopPointReached += LoopPointReached;
+                        //フェードアウト開始
+                        //フェードアウトが終わったらビデオを開始
+                        fade.FadeOut(fadeTime, () => videoPlayer.Play());
+                        isPlayVideo = true;
 
-                        });
-                        isFade = true;
-                    }
-                }
-                else
-                {
+                    });
+                    isFade = true;
                 }
             }
             else
@@ -112,13 +108,10 @@ public class VideoManager : MonoBehaviour
         //再生中の時
         else
         {
-
             //何かしらのキー、マウスが押されたとき
             if (Input.anyKeyDown)
             {
-                ResetVideo();
-                //ビデオを映すオブジェクトを非表示に
-                video.SetActive(false);
+                FinishVideo();
             }
         }
     }
@@ -128,6 +121,14 @@ public class VideoManager : MonoBehaviour
     /// </summary>
     public void LoopPointReached(VideoPlayer vp)
     {
+        FinishVideo();
+    }
+
+    /// <summary>
+    /// 動画終了時の処理
+    /// </summary>
+    private void FinishVideo()
+    {
         isFade = false;
         if (video.activeSelf)
         {
@@ -136,8 +137,8 @@ public class VideoManager : MonoBehaviour
             {
                 //フェードイン開始
                 //フェードインが終わったらビデオを映すオブジェクトを表示
-                fade.FadeIn(fadeTime, () => 
-                { 
+                fade.FadeIn(fadeTime, () =>
+                {
                     video.SetActive(false);
                     fade.FadeOut(fadeTime);
                 });
@@ -147,5 +148,4 @@ public class VideoManager : MonoBehaviour
 
         ResetVideo();
     }
-
 }

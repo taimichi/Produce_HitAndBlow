@@ -25,14 +25,16 @@ public class GameManager : MonoBehaviour
     //一度プレイしたかどうか
     private bool isOnePlay = false;
 
+    //現在のシーン名
     private string nowSceneName = "";
 
     private enum MANAGER_MODE
     {
-        none,
-        title,
-        game,
+        none,       //それ以外
+        title,      //タイトルシーン
+        game,       //ゲームシーン
     }
+    //現在のシーン
     private MANAGER_MODE nowMode = MANAGER_MODE.none;
 
     void Start()
