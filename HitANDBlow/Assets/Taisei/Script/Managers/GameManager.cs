@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     private DifficultResultManager DiffResuManager;
     private TitleManager titleManager;
     private GuideManager guideManager;
+    private VideoManager videoManager;
 
     //ゲームが開始したかどうか
     private bool isGameStart = false;
@@ -24,14 +25,16 @@ public class GameManager : MonoBehaviour
     //一度プレイしたかどうか
     private bool isOnePlay = false;
 
+    //現在のシーン名
     private string nowSceneName = "";
 
     private enum MANAGER_MODE
     {
-        none,
-        title,
-        game,
+        none,       //それ以外
+        title,      //タイトルシーン
+        game,       //ゲームシーン
     }
+    //現在のシーン
     private MANAGER_MODE nowMode = MANAGER_MODE.none;
 
     void Start()
@@ -50,6 +53,7 @@ public class GameManager : MonoBehaviour
                 nowMode = MANAGER_MODE.title;
                 titleManager = TitleManager.Instance;
                 guideManager = GuideManager.Instance;
+                videoManager = VideoManager.Instance;
                 break;
 
             //ゲームシーンの時
@@ -72,27 +76,31 @@ public class GameManager : MonoBehaviour
                 break;
 
             case MANAGER_MODE.title:
-                TitleUpdate();
+                //タイトルのアップデート処理
+                titleManager.TitleUpdate();
                 //ルール説明画面が表示状態の時
                 if (guideManager.CheckGuideOnOff())
                 {
+                    //ガイドの更新処理
                     guideManager.GuideUpdata();
+
+                    //何かしらの操作があったため、動画再生までの時間をリセット
+                    videoManager.ResetVideo();
+                }
+                //ルール説明画面が非表示状態の時
+                else
+                {
+                    //ビデオの更新処理
+                    videoManager.VideoUpdate();
                 }
                 break;
 
             case MANAGER_MODE.game:
+                //ゲームの更新処理
                 GameUpdate();
                 break;
         }
 
-    }
-
-    /// <summary>
-    /// タイトルシーンのアップデート
-    /// </summary>
-    private void TitleUpdate()
-    {
-        titleManager.TitleUpdate();
     }
 
     /// <summary>

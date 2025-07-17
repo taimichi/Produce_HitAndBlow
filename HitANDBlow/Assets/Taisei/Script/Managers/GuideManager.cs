@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// ルール説明用のマネージャースクリプト
+/// </summary>
 public class GuideManager : MonoBehaviour
 {
+    //シングルトン設定
     private static GuideManager instance;
     public static GuideManager Instance
     {
@@ -18,21 +22,26 @@ public class GuideManager : MonoBehaviour
         }
     }
 
-    [SerializeField] private GameObject GuidePanel;
-    [SerializeField] private RubyText guideText;
-    [SerializeField] private Image GuideImage;
-    [SerializeField] private Text Page;
+    //ルール説明用
+    [SerializeField] private GameObject GuidePanel; //ルール説明画面のパネル
+    [SerializeField] private RubyText guideText;    //ルール説明のテキスト
+    [SerializeField] private Image GuideImage;      //ルール説明の画像
+    [SerializeField] private Text Page;             //ルール説明のページ数
 
+    //現在のページ数
     [System.NonSerialized]public int nowGuidePage = 0;
+    //最大ページ数
     [System.NonSerialized] public int maxGuidePage;
     private GuideTextList textList;
 
+    //ボタン用
     private List<GuideInput> guideInputs = new List<GuideInput>();
 
+    //ページを変更したかどうか
     [System.NonSerialized]public bool isPageChange = false;
 
-    [SerializeField] private Image LeftButton;
-    [SerializeField] private Image RightButton;
+    [SerializeField] private Image LeftButton;      //左ボタン
+    [SerializeField] private Image RightButton;     //右ボタン
 
 
     private void Awake()
@@ -89,6 +98,9 @@ public class GuideManager : MonoBehaviour
         if (nowGuidePage <= 0 && LeftButton.enabled == true)
         {
             LeftButton.enabled = false;
+
+            GuideInput left = LeftButton.GetComponent<GuideInput>();
+            left.SelectObjActive(false);
         }
         else if (nowGuidePage > 0 && LeftButton.enabled == false)
         {
@@ -99,6 +111,9 @@ public class GuideManager : MonoBehaviour
         if (nowGuidePage >= maxGuidePage - 1 && RightButton.enabled == true)
         {
             RightButton.enabled = false;
+
+            GuideInput right = RightButton.GetComponent<GuideInput>();
+            right.SelectObjActive(false);
         }
         else if (nowGuidePage < maxGuidePage - 1 && RightButton.enabled == false)
         {

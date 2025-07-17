@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 難易度と結果関連
+/// 難易度と結果関連のマネージャースクリプト
 /// </summary>
 public class DifficultResultManager : MonoBehaviour
 {

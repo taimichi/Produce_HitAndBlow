@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
-
+//ルール説明用ボタンスクリプト
 public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // ボタンの種類を設定
@@ -23,6 +23,7 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [Header("選択中に表示するオブジェクト"), SerializeField]
     GameObject nowSelectObj;
 
+    //ガイドマネージャー
     private GuideManager guideMG;
 
     private void Awake()
@@ -44,6 +45,11 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         // 非表示
         nowSelectObj.SetActive(false);
         //Debug.Log("UIから離れた");
+    }
+
+    public void SelectObjActive(bool _isTrigger)
+    {
+        nowSelectObj.SetActive(_isTrigger);
     }
     #endregion
 
