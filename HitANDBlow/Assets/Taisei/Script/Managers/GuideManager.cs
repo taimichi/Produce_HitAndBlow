@@ -43,6 +43,11 @@ public class GuideManager : MonoBehaviour
     [SerializeField] private Image LeftButton;      //左ボタン
     [SerializeField] private Image RightButton;     //右ボタン
 
+    //放置時間計測用
+    private float timer = 0f;
+    //放置時間の限界値
+    private const float MAX_LIMIT_TIME = 180f;
+
 
     private void Awake()
     {
@@ -66,32 +71,57 @@ public class GuideManager : MonoBehaviour
 
     public void GuideUpdata()
     {
+        //ボタンの更新処理
         for(int i = 0; i < guideInputs.Count; i++)
         {
             guideInputs[i].GuideButtonInput();
         }
 
+        //ガイドが表示状態の時
         if (GuidePanel.activeSelf)
         {
+            //ページが変更されたら
             if (isPageChange)
             {
                 Guide();
+                timer = 0f;
+            }
+            else
+            {
+                //放置時間が限界を超えたら
+                if(timer >= MAX_LIMIT_TIME)
+                {
+                    //強制的にガイド画面を閉じる
+                    CloseGuide();
+                    timer = 0;
+                }
+                //超えてない場合
+                else
+                {
+                    //放置状態の時間を計測
+                    timer += Time.deltaTime;
+                }
             }
         }
 
     }
 
     /// <summary>
-    /// ページ更新
+    /// ページ数更新
     /// </summary>
     private void PageTextUpdata()
     {
         Page.text = (nowGuidePage + 1) + "/" + maxGuidePage;
     }
 
+    /// <summary>
+    /// ガイド画面の画像とテキスト、ページ数変更
+    /// </summary>
     private void Guide()
     {
+        //テキスト変更
         guideText.text = textList.guideTextList[nowGuidePage].Text;
+        //画像変更
         GuideImage.sprite = textList.guideTextList[nowGuidePage].guideSprite;
 
         //左矢印ボタンの表示非表示
@@ -124,11 +154,27 @@ public class GuideManager : MonoBehaviour
         isPageChange = false;
     }
 
+    /// <summary>
+    /// ガイド画面を閉じる
+    /// </summary>
+    public void CloseGuide()
+    {
+        isPageChange = false;
+        ChangeGuideActive(false);
+    }
+
+    /// <summary>
+    /// ガイド画面の表示状態を変更
+    /// </summary>
+    /// <param name="_trigger">false=非表示 / true=表示</param>
     public void ChangeGuideActive(bool _trigger)
     {
         GuidePanel.SetActive(_trigger);
     }
 
+    /// <summary>
+    /// ガイド用のボタン用スクリプトを取得
+    /// </summary>
     public void GetGuideInput(GuideInput _guideInput)
     {
         guideInputs.Add(_guideInput);

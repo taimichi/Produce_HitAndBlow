@@ -90,9 +90,8 @@ public class GuideInput : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     #region Function
     private void Close()
     {
-        guideMG.isPageChange = false;
         nowSelectObj.SetActive(false);
-        guideMG.ChangeGuideActive(false);
+        guideMG.CloseGuide();
     }
 
     private void Left()

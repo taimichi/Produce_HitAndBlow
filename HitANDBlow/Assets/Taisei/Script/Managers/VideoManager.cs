@@ -98,6 +98,7 @@ public class VideoManager : MonoBehaviour
                     isFade = true;
                 }
             }
+            //待機時間を超えていないとき
             else
             {
                 //何もキーが押されていない時間を計測
