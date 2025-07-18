@@ -37,6 +37,10 @@ public class GameManager : MonoBehaviour
     //現在のシーン
     private MANAGER_MODE nowMode = MANAGER_MODE.none;
 
+    // 追加分のやつ
+    [SerializeField] GameObject panel; // パネルを表示しておく
+    [SerializeField] Text TimerText;   // クールタイムを表示する
+
     void Start()
     {
         //現在のシーン名を取得
@@ -108,9 +112,26 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void GameUpdate()
     {
+        // 表示していたら動かさないでね
+        if (panel.activeSelf == true) {
+            IntervalManager.Instance.RESTART();
+            int min = Mathf.FloorToInt(IntervalManager.Instance._Time / 60);
+            int sec = Mathf.FloorToInt(IntervalManager.Instance._Time % 60);
+            float miri = IntervalManager.Instance._Time % 1.0f;
+            // テキスト変更
+            TimerText.text = string.Format("{0:00}:{1:00}", min, sec);
+            if (!IntervalManager.Instance.CoolTime)
+            {
+                panel.SetActive(false);
+            }
+            return; }
+
         //ゲーム開始前
         if (!isGameStart)
         {
+            // 計算を止める（つばさ追加分）
+            IntervalManager.Instance.CoolTime=false;
+
             DiffResuManager.DifficultUpdate();
 
             //難易度が選択されたとき
@@ -123,6 +144,9 @@ public class GameManager : MonoBehaviour
         //ゲーム開始後
         else
         {
+            // 計算開始（つばさ追加分）
+            IntervalManager.Instance.Calculation();
+
             NumManager.NumberUpdate();
             //ゲーム中の時
             if (!isGameFinish)
@@ -159,7 +183,10 @@ public class GameManager : MonoBehaviour
             {
                 ResultText.text = "ゲームクリア！";
             }
-
+            if (IntervalManager.Instance.CoolTime)
+            {
+                panel.SetActive(true);
+            }
             isOnePlay = true;
         }
 
